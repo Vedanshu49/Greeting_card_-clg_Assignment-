@@ -1,0 +1,307 @@
+/* --- Scene Setup --- */
+body {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #000;
+    /* Darker base for Aurora */
+    font-family: 'Lato', sans-serif;
+    overflow: hidden;
+    perspective: 1500px;
+    /* Increased perspective for better parallax */
+}
+
+/* --- NEW: Aurora Borealis Background --- */
+@keyframes aurora-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#aurora-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #0c1a2c, #0d122c, #2e1a47, #3b1e52, #1d3c5e);
+    background-size: 600% 600%;
+    animation: aurora-animation 25s ease infinite;
+    z-index: -1;
+}
+
+/* --- The Scene (for Parallax) --- */
+.scene {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease-out;
+    /* Smooths the parallax movement */
+}
+
+/* ... (Magic Box styles remain the same) ... */
+.magic-box {
+    position: relative;
+    width: 200px;
+    height: 150px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease, opacity 1s ease 0.2s;
+}
+
+.magic-box:not(.open):hover {
+    transform: scale(1.1);
+}
+
+.box-lid,
+.box-body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+}
+
+.box-lid {
+    transform-origin: top;
+    transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 10;
+}
+
+.lid-top {
+    position: absolute;
+    width: 200px;
+    height: 150px;
+    background: #4a4a8a;
+    border: 2px solid #a3a3d3;
+    transform: rotateX(90deg) translateZ(75px);
+}
+
+.lid-front {
+    position: absolute;
+    width: 200px;
+    height: 30px;
+    background: linear-gradient(to top, #3a3a7a, #5a5a9a);
+    transform: translateZ(75px);
+}
+
+.body-front {
+    position: absolute;
+    width: 200px;
+    height: 150px;
+    background: #333363;
+    transform: translateZ(75px);
+}
+
+.body-right {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: #2c2c5c;
+    transform: rotateY(90deg) translateZ(100px);
+}
+
+.body-bottom {
+    position: absolute;
+    width: 200px;
+    height: 150px;
+    background: #222242;
+    transform: rotateX(-90deg) translateZ(75px);
+}
+
+
+/* --- The Flippable Card --- */
+.surprise-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: opacity 0.5s 0.5s ease, transform 1s 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    width: 300px;
+    height: 200px;
+    z-index: 5;
+    pointer-events: none;
+    transform-style: preserve-3d;
+}
+
+/* ... (Card flip styles remain the same) ... */
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+    transform-style: preserve-3d;
+}
+
+.surprise-message.is-clickable {
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    padding: 20px;
+    color: #333;
+    font-family: 'Cinzel', serif;
+    text-align: center;
+}
+
+.card-front p {
+    font-size: 2.5rem;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+}
+
+.card-back p {
+    font-size: 1.2rem;
+    font-family: 'Lato', sans-serif;
+    font-style: italic;
+}
+
+.card-back .signature {
+    margin-top: 15px;
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+
+/* --- NEW: Floating Card Animation --- */
+@keyframes float-effect {
+    0% {
+        transform: translateY(5px);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(5px);
+    }
+}
+
+.surprise-message.is-floating .card-inner {
+    animation: float-effect 6s ease-in-out infinite;
+}
+
+/* --- Prompt Text --- */
+.click-prompt {
+    position: absolute;
+    bottom: -50px;
+    width: 100%;
+    text-align: center;
+    color: #a3a3d3;
+    font-weight: bold;
+    letter-spacing: 2px;
+    transition: opacity 0.5s;
+}
+
+/* --- NEW: Galaxy Swirl Animation --- */
+#galaxy-swirl {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(150, 128, 255, 0.5) 30%, rgba(0, 0, 0, 0) 70%);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+    pointer-events: none;
+}
+
+@keyframes galaxy-reveal-animation {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.5) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+#galaxy-swirl.animate {
+    animation: galaxy-reveal-animation 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* --- Box & Card Animations --- */
+.magic-box.open .box-lid {
+    transform: rotateX(-120deg);
+}
+
+.magic-box.open~#surprise-message {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.magic-box.open~.click-prompt {
+    opacity: 0;
+}
+
+.surprise-message.letter-reveal {
+    transform: translate(-50%, -50%) scale(1.2) translateZ(100px);
+    z-index: 20;
+}
+
+.magic-box.box-fade-out {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+.card-inner.is-flipped {
+    transform: rotateY(180deg);
+}
+
+/* --- Particle Effects --- */
+@keyframes particle-burst {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: var(--transform-end);
+        opacity: 0;
+    }
+}
+
+.particle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: var(--color);
+    animation: particle-burst 1.5s ease-out forwards;
+}

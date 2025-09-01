@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Celestial Surprise</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lato&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="cardcss.css">
+</head>
+<body>
+
+    <div id="aurora-bg"></div>
+
+    <div class="scene" id="scene">
+        <!-- The Box -->
+        <div id="magic-box" class="magic-box">
+            <div class="box-lid">
+                <div class="lid-top"></div>
+                <div class="lid-front"></div>
+            </div>
+            <div class="box-body">
+                <div class="body-front"></div>
+                <div class="body-right"></div>
+                <div class="body-bottom"></div>
+            </div>
+        </div>
+
+        <!-- The Flippable Card with new messages -->
+        <div id="surprise-message" class="surprise-message">
+            <div class="card-inner">
+                <div class="card-front">
+                    <p>A Surprise For You</p>
+                </div>
+                <div class="card-back">
+                    <p>Crafted with code & creativity.</p>
+                    <span class="signature">— By Vedanshu</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Element for the galaxy swirl animation -->
+        <div id="galaxy-swirl"></div>
+        
+        <div id="click-prompt" class="click-prompt">Click the Box</div>
+    </div>
+    
+    <div id="particle-container"></div>
+
+    <audio id="magic-sound" src="https://assets.codepen.io/217233/magical_sweep.wav" preload="auto"></audio>
+    <audio id="flip-sound" src="https://assets.codepen.io/217233/paper-flip.wav" preload="auto"></audio>
+    
+    <script src="card.js"></script>
+
+</body>
+</html>
