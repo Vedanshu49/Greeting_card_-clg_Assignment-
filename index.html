@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lato&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="cardcss.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <!-- The Flippable Card with new messages -->
+        <!-- The Flippable Card -->
         <div id="surprise-message" class="surprise-message">
             <div class="card-inner">
                 <div class="card-front">
@@ -48,12 +48,16 @@
         <div id="click-prompt" class="click-prompt">Click the Box</div>
     </div>
     
+    <button id="flip-button" class="flip-button">Flip Card</button>
+    
     <div id="particle-container"></div>
 
-    <audio id="magic-sound" src="https://assets.codepen.io/217233/magical_sweep.wav" preload="auto"></audio>
-    <audio id="flip-sound" src="https://assets.codepen.io/217233/paper-flip.wav" preload="auto"></audio>
+    <!-- UPDATED: Pointing to the correct local file types -->
+    <audio id="magic-sound" src="./magic-sound.wav" preload="auto"></audio>
+    <audio id="flip-sound" src="./flip-sound.wav" preload="auto"></audio>
     
-    <script src="card.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
+

@@ -1,62 +1,75 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Get references to all elements ---
     const scene = document.getElementById('scene');
     const magicBox = document.getElementById('magic-box');
     const surpriseMessage = document.getElementById('surprise-message');
     const cardInner = document.querySelector('.card-inner');
+    const flipButton = document.getElementById('flip-button');
     const particleContainer = document.getElementById('particle-container');
     const galaxySwirl = document.getElementById('galaxy-swirl');
     const magicSound = document.getElementById('magic-sound');
     const flipSound = document.getElementById('flip-sound');
 
+    // --- State Flags ---
     let isBoxOpen = false;
-    let isLetterRevealed = false;
+    let isCardRevealed = false;
 
-    // --- STAGE 1: Open the box ---
-    const openBox = () => {
+    // --- Main Click Handler for the Box ---
+    const handleBoxClick = () => {
         if (isBoxOpen) return;
         isBoxOpen = true;
 
+        // **FIX:** Play sound immediately as the FIRST action.
+        magicSound.play().catch(error => console.error("Magic sound failed:", error));
+
+        // Now, proceed with animations.
         magicBox.classList.add('open');
-        magicSound.play();
         createParticles(30);
         galaxySwirl.classList.add('animate');
-
+        magicBox.removeEventListener('click', handleBoxClick);
+        
         setTimeout(() => {
             surpriseMessage.classList.add('is-clickable');
-            surpriseMessage.addEventListener('click', revealLetter);
-        }, 1000); 
+            surpriseMessage.addEventListener('click', revealCard);
+        }, 1000);
     };
 
-    // --- STAGE 2: Reveal the letter and hide the box ---
-    const revealLetter = () => {
-        if (isLetterRevealed) return;
-        isLetterRevealed = true;
+    // --- Click Handler to Reveal the Card ---
+    const revealCard = () => {
+        if (isCardRevealed) return;
+        isCardRevealed = true;
 
         surpriseMessage.classList.add('letter-reveal');
         magicBox.classList.add('box-fade-out');
+        surpriseMessage.classList.remove('is-clickable');
+        flipButton.classList.add('visible');
         
-        // **FIXED LOGIC HERE**
-        // Remove the old listener and immediately add the new one for flipping.
-        // This removes the timing bug.
-        surpriseMessage.removeEventListener('click', revealLetter);
-        surpriseMessage.classList.add('is-floating');
-        surpriseMessage.addEventListener('click', flipCard);
+        surpriseMessage.addEventListener('transitionend', function(event) {
+            if (event.propertyName === 'transform') {
+                surpriseMessage.classList.add('is-floating');
+            }
+        }, { once: true });
     };
 
-    // --- STAGE 3 & BEYOND: Flip the card back and forth ---
-    const flipCard = () => {
+    // --- Click Handler for the Flip Button ---
+    const handleFlipButtonClick = () => {
+        // **FIX:** Play sound immediately as the FIRST action.
+        flipSound.play().catch(error => console.error("Flip sound failed:", error));
+        
+        // Now, proceed with the animation.
         cardInner.classList.toggle('is-flipped');
-        flipSound.play();
-    }
+    };
 
-    // --- Parallax Mouse Movement ---
+    // --- Floating Card Mouse Movement ---
     const handleMouseMove = (e) => {
+        if (!isCardRevealed) return;
         const { clientX, clientY } = e;
         const { innerWidth, innerHeight } = window;
-        const mouseX = (clientX / innerWidth) * 2 - 1;
-        const mouseY = -(clientY / innerHeight) * 2 + 1;
-        const maxRotation = 10;
-        scene.style.transform = `rotateY(${mouseX * maxRotation}deg) rotateX(${mouseY * maxRotation}deg)`;
+        const mouseX = (clientX / innerWidth) - 0.5;
+        const mouseY = (clientY / innerHeight) - 0.5;
+        const maxOffset = 30;
+        surpriseMessage.style.setProperty('--mouse-x', `${mouseX * maxOffset}px`);
+        surpriseMessage.style.setProperty('--mouse-y', `${mouseY * maxOffset}px`);
     };
 
     // --- Particle Creation ---
@@ -76,7 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Attach event listeners
-    magicBox.addEventListener('click', openBox);
+    // --- Attach the initial event listeners ---
+    magicBox.addEventListener('click', handleBoxClick);
+    flipButton.addEventListener('click', handleFlipButtonClick);
     window.addEventListener('mousemove', handleMouseMove);
 });
